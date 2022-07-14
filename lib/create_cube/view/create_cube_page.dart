@@ -107,20 +107,79 @@ class ShowSolutionButton extends StatelessWidget {
             child: CircularProgressIndicator(),
           );
         }
-        return ElevatedButton(
-          onPressed: () {
-            context.read<SolveCubeBloc>().add(
-                  SolveCubeSolutionRequested(
-                    Cube.from(
-                      context.read<CreateCubeBloc>().state.cube.stringNotation,
+        final _colors = Theme.of(context).colorScheme;
+        return ElevatedButtonTheme(
+          data: ElevatedButtonThemeData(
+            style: (Theme.of(context).elevatedButtonTheme.style ??
+                    ElevatedButton.styleFrom())
+                .copyWith(
+              elevation: MaterialStateProperty.resolveWith(
+                  (Set<MaterialState> states) {
+                if (states.contains(MaterialState.disabled)) {
+                  return 0.0;
+                }
+                if (states.contains(MaterialState.hovered)) {
+                  return 1.0;
+                }
+                if (states.contains(MaterialState.focused)) {
+                  return 0.0;
+                }
+                if (states.contains(MaterialState.pressed)) {
+                  return 0.0;
+                }
+                return 0.0;
+              }),
+              backgroundColor: MaterialStateProperty.resolveWith(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.disabled)) {
+                    return _colors.onSurface.withOpacity(0.12);
+                  }
+                  return _colors.primary;
+                },
+              ),
+              foregroundColor: MaterialStateProperty.resolveWith(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.disabled)) {
+                    return _colors.onSurface.withOpacity(0.38);
+                  }
+                  return _colors.onPrimary;
+                },
+              ),
+              overlayColor: MaterialStateProperty.resolveWith(
+                (Set<MaterialState> states) {
+                  if (states.contains(MaterialState.hovered)) {
+                    return _colors.onPrimary.withOpacity(0.08);
+                  }
+                  if (states.contains(MaterialState.focused)) {
+                    return _colors.onPrimary.withOpacity(0.12);
+                  }
+                  if (states.contains(MaterialState.pressed)) {
+                    return _colors.onPrimary.withOpacity(0.12);
+                  }
+                  return null;
+                },
+              ),
+            ),
+          ),
+          child: ElevatedButton(
+            onPressed: () {
+              context.read<SolveCubeBloc>().add(
+                    SolveCubeSolutionRequested(
+                      Cube.from(
+                        context
+                            .read<CreateCubeBloc>()
+                            .state
+                            .cube
+                            .stringNotation,
+                      ),
+                      targetCube:
+                          context.read<SettingsCubit>().state.solutionCube,
+                      deepSolve: context.read<SettingsCubit>().state.deepSolve,
                     ),
-                    targetCube:
-                        context.read<SettingsCubit>().state.solutionCube,
-                    deepSolve: context.read<SettingsCubit>().state.deepSolve,
-                  ),
-                );
-          },
-          child: const Text('Show Solution'),
+                  );
+            },
+            child: const Text('Show Solution'),
+          ),
         );
       },
     );
