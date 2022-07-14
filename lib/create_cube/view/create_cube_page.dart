@@ -370,7 +370,9 @@ class PieceColorInput extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           border: Border.all(
-            color: isSelected ? Colors.white : Colors.transparent,
+            color: isSelected
+                ? Theme.of(context).colorScheme.onBackground
+                : Colors.transparent,
             width: 2,
           ),
         ),
