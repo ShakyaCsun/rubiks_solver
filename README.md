@@ -97,8 +97,8 @@ This project relies on [flutter_localizations][flutter_localizations_link] and f
 
     @override
     Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Text(l10n.helloWorld);
+      final l10n = context.l10n;
+      return Text(l10n.helloWorld);
     }
     ```
 
